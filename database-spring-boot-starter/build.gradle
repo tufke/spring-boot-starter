@@ -1,0 +1,46 @@
+dependencies {
+	api enforcedPlatform(project(':service-spring-bom'))
+	annotationProcessor enforcedPlatform(project(':service-spring-bom'))
+
+	// spring boot/cloud dependencies
+	api 'org.springframework.boot:spring-boot-starter-data-jpa'
+	api 'org.springframework.boot:spring-boot-starter-jdbc'
+
+	// additional dependencies
+	api 'com.zaxxer:HikariCP'
+	api 'org.flywaydb:flyway-core'
+	api 'com.google.code.findbugs:jsr305'
+	api "org.postgresql:postgresql:${postgresqlVersion}"
+	api("org.hsqldb:hsqldb:${hsqldbVersion}")
+
+	// needed dependencies since flyway 10.x
+	runtimeOnly 'org.flywaydb:flyway-database-postgresql'
+	runtimeOnly 'org.flywaydb:flyway-database-hsqldb'
+	runtimeOnly 'com.h2database:h2'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	//test dependencies
+	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	testImplementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+	testCompileOnly 'org.projectlombok:lombok:1.18.36'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.platform:junit-platform-launcher'
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
+}
+

@@ -1,0 +1,5 @@
+nl.kabisa.spring.boot.starter.service.config.ApplicationListenerConfig
+nl.kabisa.spring.boot.starter.service.config.AppSecurityConfig
+nl.kabisa.spring.boot.starter.service.jackson.JacksonAutoConfiguration
+nl.kabisa.spring.boot.starter.service.problem.ProblemAutoConfiguration
+nl.kabisa.spring.boot.starter.service.logging.LoggingAutoConfiguration

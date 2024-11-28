@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  nl.kabisa.spring.boot.starter.service.bootstrap.BootstrapEnvironmentPostProcessor

@@ -1,0 +1,30 @@
+### IntelliJ IDEA ###
+.gradle
+build/
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+### Various ###
+**/.env
+out/
+/database-spring-boot-starter/build/
+/service-spring-bom/build/
+/service-spring-boot-starter/build/

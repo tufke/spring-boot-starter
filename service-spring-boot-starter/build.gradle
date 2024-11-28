@@ -1,0 +1,50 @@
+dependencies {
+	api enforcedPlatform(project(':service-spring-bom'))
+	annotationProcessor enforcedPlatform(project(':service-spring-bom'))
+
+	// spring boot/cloud dependencies versions defined in spring-boot-dependencies and spring-cloud-dependencies
+	api 'org.springframework.boot:spring-boot-starter'
+	api 'org.springframework.boot:spring-boot-autoconfigure'
+	api 'org.springframework.boot:spring-boot-starter-web'
+	api 'org.springframework.boot:spring-boot-starter-actuator'
+	api 'org.springframework.boot:spring-boot-starter-security'
+	api 'org.springframework.boot:spring-boot-starter-validation'
+	//api 'org.springframework.cloud:spring-cloud-starter-config'
+	//api 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+	// additional dependencies not available in spring dependencies versions defined in service-bom
+	api 'org.apache.commons:commons-lang3'
+	api 'com.google.code.findbugs:jsr305'
+	//api 'com.google.guava:guava'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	//test dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.vintage:junit-vintage-engine'
+	testImplementation 'org.junit.platform:junit-platform-launcher'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+		}
+	}
+
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
+}

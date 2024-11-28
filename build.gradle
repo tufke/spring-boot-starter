@@ -1,0 +1,108 @@
+buildscript {
+    ext {
+        // spring
+        springBootVersion = '3.3.4'
+        //springCloudVersion = '2023.0.3'
+
+        // 3rd party
+        jsr305Version = '3.0.2'
+        commonslang3Version = '3.17.0'
+
+        // database
+        postgresqlVersion = '42.7.4'
+        hsqldbVersion = '2.7.3'
+    }
+    dependencies {
+        classpath("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+allprojects {
+    group = 'nl.kabisa.spring.boot.starter'
+    version = '2024.Q4.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+dependencies {
+    implementation platform(project(':service-spring-bom'))
+
+    implementation project(':database-spring-boot-starter')
+    implementation project(':service-spring-boot-starter')
+}
+
+subprojects {
+    if (project.name.endsWith("bom")) {
+        return
+    }
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+    apply plugin: 'jacoco'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+        withSourcesJar()
+    }
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        suppressedValidationErrors.add('enforced-platform')
+    }
+
+    test {
+        useJUnitPlatform()
+        systemProperties['eureka.client.enabled'] = 'false'
+        systemProperties['spring.cloud.config.enabled'] = 'false'
+    }
+
+    jacoco {
+        toolVersion = '0.8.12'
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = true
+            csv.required = false
+            html.required = true
+            html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        }
+    }
+
+    check.dependsOn(jacocoTestReport)
+
+    if (project.file("src/main/java").exists()) {
+        apply plugin: 'info.solidsoft.pitest'
+
+        pitest {
+            junit5PluginVersion = '1.2.1'
+            targetClasses = ['nl.kabisa.spring.boot.starter.*']
+            threads = 2
+            // Mutations can cause infinite loops. Mutated tests time out after: <unmutated test duration> * timeoutFactor + timeoutConstInMillis
+            // Spring tests can take a long time, and consume a lot of threads; so greatly extend the timeout, and limit the number of test threads
+            timeoutFactor = 12.5 // Default is 1.25
+            timeoutConstInMillis = 30000 // Default is 3000
+            outputFormats = ['XML', 'HTML']
+            mutators = ['CONDITIONALS_BOUNDARY',
+                        'INCREMENTS',
+                        'INVERT_NEGS',
+                        'MATH',
+                        'NEGATE_CONDITIONALS',
+                        'VOID_METHOD_CALLS',
+                        'EMPTY_RETURNS',
+                        'FALSE_RETURNS',
+                        'TRUE_RETURNS',
+                        'PRIMITIVE_RETURNS']
+            timestampedReports = false
+        }
+    }
+}
+

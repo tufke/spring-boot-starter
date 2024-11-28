@@ -1,0 +1,48 @@
+plugins {
+    id 'java-platform'
+    id 'maven-publish'
+}
+
+javaPlatform {
+    allowDependencies()
+}
+
+dependencies {
+    api(enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
+    //api(enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"))
+
+    constraints {
+        api(project(":database-spring-boot-starter"))
+        api(project(":service-spring-boot-starter"))
+
+        // Force versions here in case of conflicts instead of in each service
+        api("com.google.code.findbugs:jsr305:${jsr305Version}")
+        api("org.apache.commons:commons-lang3:${commonslang3Version}")
+
+
+     }
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+    suppressedValidationErrors.add('enforced-platform')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.javaPlatform
+            pom {
+                description = 'BOM for spring-starters'
+                properties = [
+                        springBootVersion : "${springBootVersion}",
+                        //springCloudVersion: "${springCloudVersion}"
+                ]
+            }
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
