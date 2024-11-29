@@ -1,7 +1,5 @@
 package nl.kabisa.spring.boot.starter.service.config;
 
-import nl.kabisa.spring.boot.starter.service.config.AppStartupListener;
-import nl.kabisa.spring.boot.starter.service.config.ApplicationListenerConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

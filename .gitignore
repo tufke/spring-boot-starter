@@ -25,6 +25,8 @@ bin/
 ### Various ###
 **/.env
 out/
-/database-spring-boot-starter/build/
+
+/.gradle/
 /service-spring-bom/build/
+/database-spring-boot-starter/build/
 /service-spring-boot-starter/build/
