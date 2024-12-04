@@ -37,7 +37,6 @@ public class AppSecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(matcherRegistry -> matcherRegistry
                         .requestMatchers(new AntPathRequestMatcher("/actuator/**")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                 )
                 .headers(headers -> headers
